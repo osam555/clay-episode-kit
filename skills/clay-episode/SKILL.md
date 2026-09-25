@@ -59,6 +59,18 @@ Windows 에서 `.sh` 는 쓰지 않습니다 — 같은 이름의 `.py` 를 씁�
 
 Aside 를 못 쓰는 환경이면 8절(Playwright 폴백)로 갑니다.
 
+## S. 설치·설정을 Claude 에게 맡기기 (0절·A절의 자동화판)
+
+사람이 직접 해야 하는 것은 **가입·결제·로그인·키 복사** 네 가지뿐입니다. 나머지는 이 두 프롬프트로 Claude Code 에게 시킵니다. 실행 전 사람이 해 둘 것: Aside 앱 설치·로그인 + Aside 안에서 Flow·YouTube Studio 로그인, Typecast 키 복사, Cloudflare 가입.
+
+**S-1 도구·키트 설치** (아무 폴더에서 Claude Code 를 열고):
+> https://github.com/osam555/clay-episode-kit 을 클론하고 그 폴더로 들어가서 설치를 끝내줘. 순서: (1) python 3.12+/node 20+/ffmpeg 가 없으면 이 OS 의 패키지 관리자(Windows winget, mac brew)로 설치하고 버전을 보여줘 (2) pip install -r requirements.txt, npm install, npx playwright install chromium (3) ESBUILD 환경변수를 이 OS 에 맞는 esbuild 실행파일 경로로 **영구 저장**(Windows setx, mac ~/.zshrc)하고 지금 터미널에도 적용 (4) 내가 다음 메시지에 Typecast 키를 주면 .env.local 에 `TYPECAST_API_KEY=…` 한 줄로만 저장하고 화면·로그·git 에 절대 남기지 마 — 지금은 키를 묻기만 하고 멈춰.
+
+**S-2 계정 연결·설정 채우기** (키트 폴더에서):
+> clay-episode 스킬을 읽고 kit.config.json 을 채워줘. (1) `aside repl` 로 열린 탭을 읽어 flow.google.com 탭 id 를 FLOW_TAB 으로 영구 저장하고, studio.youtube.com 탭 id 를 channels.main.studio_tab_hint 에, 그 탭 주소의 UC… 를 channel_id 에 적어 (2) `npx wrangler login` 상태를 확인하고(안 됐으면 로그인 명령을 안내하고 기다려), `wrangler r2 bucket create <내가 정한 이름>` 로 버킷을 만들고 `wrangler r2 bucket dev-url enable <이름>` 로 공개 주소를 켠 뒤 storage 칸(r2_bucket·r2_prefix=episodes·media_base_url=공개주소/episodes)을 채워 (3) python scripts/new_project.py --defaults 로 나머지를 만들고 brand.name 은 "<내 채널 이름>" 으로 (4) 끝나면 kit.config.json 을 표로 요약해 보여주되 탭 id·키 값은 가려. characters 는 건드리지 마 — 다음에 내가 따로 시킬게.
+
+주의: `wrangler r2 bucket dev-url enable` 은 계정에 따라 대시보드 확인을 요구할 수 있습니다 — 그때는 0절 R2 줄의 ② 만 손으로.
+
 ---
 
 ## A. 내 프로젝트 만들기 (주제·캐릭터·브랜드)
