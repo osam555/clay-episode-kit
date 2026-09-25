@@ -7,7 +7,7 @@ for e in "$@"; do
   npx wrangler r2 object put speed-listening-popsong/allirang/$e/thumb_a.png --file assets/longform/$e/thumb/final-a.png --remote >/dev/null 2>&1
   python3 scripts/ship_short.py $e --dry >/dev/null 2>&1
   python3 - $e <<'PY'
-import sys,json
+import sys,json,os
 sys.path.insert(0,'scripts'); import youtube_upload as Y
 e=sys.argv[1]; S=os.environ.get('FLOW_WORK', os.path.join(os.environ.get('ALLIRANG_ROOT', os.getcwd()),'scratch','flow_tools'))
 L=json.load(open(f'{S}/yt_meta.json')); L=[x for x in L if x['ep']!=e]
