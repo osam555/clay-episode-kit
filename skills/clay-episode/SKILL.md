@@ -43,7 +43,7 @@ description: 어떤 주제든(과학·역사·생활·영어·한자…) 클레�
 | ffmpeg | gyan.dev 에서 받아 `bin\` 을 PATH 에 추가 (`ffmpeg -version` 으로 확인) | `brew install ffmpeg` |
 | **Aside** (브라우저 자동화) | https://aside.com/download → 설치 → `aside login` | 동일 |
 | Typecast (더빙 목소리) | typecast.ai 가입 → API 키 → 프로젝트 폴더에 `.env.local` 파일 만들고 `TYPECAST_API_KEY=키` 한 줄. **이 파일은 절대 공유·커밋 금지** | 동일 |
-| Cloudflare R2 (영상 임시 저장소, 무료 티어면 충분) | ① cloudflare.com 가입 → 왼쪽 메뉴 **R2 Object Storage** → **Create bucket**(이름 예 `my-videos`, 위치 자동) ② 버킷 → **Settings** → **Public access · R2.dev subdomain → Allow Access** → 나오는 `https://pub-….r2.dev` 주소 복사 ③ 터미널 `npx wrangler login`(브라우저에서 허용) ④ `kit.config.json` 의 `storage` 에 `r2_bucket`(버킷 이름)·`r2_prefix`(폴더, 예 `episodes`)·`media_base_url`(`https://pub-….r2.dev/episodes`) 기입 | 동일 |
+| Cloudflare R2 (영상 임시 저장소, 무료 티어면 충분) | ① https://dash.cloudflare.com/sign-up 가입(무료, R2 는 결제 수단 등록만 요구) ② 터미널 `npx wrangler login` → 브라우저에서 **Allow** ③ `python3 scripts/setup_r2.py my-videos` — 버킷 생성·공개 주소 켜기·`kit.config.json` 의 `storage` 기입까지 한 번에 | 동일 |
 | Google Drive 앱 (선택, 재사용 라이브러리 백업) | 설치·로그인 후 `$env:DRIVE_LIB="G:\My Drive\clay-library"` | `export DRIVE_LIB=~/…/My Drive/clay-library` |
 
 Windows 에서 `.sh` 는 쓰지 않습니다 — 같은 이름의 `.py` 를 씁니다(`prep_more.py`, `drain_uploads.py`).
@@ -67,9 +67,9 @@ Aside 를 못 쓰는 환경이면 8절(Playwright 폴백)로 갑니다.
 > https://github.com/osam555/clay-episode-kit 을 클론하고 그 폴더로 들어가서 설치를 끝내줘. 순서: (1) python 3.12+/node 20+/ffmpeg 가 없으면 이 OS 의 패키지 관리자(Windows winget, mac brew)로 설치하고 버전을 보여줘 (2) pip install -r requirements.txt, npm install, npx playwright install chromium (3) ESBUILD 환경변수를 이 OS 에 맞는 esbuild 실행파일 경로로 **영구 저장**(Windows setx, mac ~/.zshrc)하고 지금 터미널에도 적용 (4) 내가 다음 메시지에 Typecast 키를 주면 .env.local 에 `TYPECAST_API_KEY=…` 한 줄로만 저장하고 화면·로그·git 에 절대 남기지 마 — 지금은 키를 묻기만 하고 멈춰.
 
 **S-2 계정 연결·설정 채우기** (키트 폴더에서):
-> clay-episode 스킬을 읽고 kit.config.json 을 채워줘. (1) `aside repl` 로 열린 탭을 읽어 flow.google.com 탭 id 를 FLOW_TAB 으로 영구 저장하고, studio.youtube.com 탭 id 를 channels.main.studio_tab_hint 에, 그 탭 주소의 UC… 를 channel_id 에 적어 (2) `npx wrangler login` 상태를 확인하고(안 됐으면 로그인 명령을 안내하고 기다려), `wrangler r2 bucket create <내가 정한 이름>` 로 버킷을 만들고 `wrangler r2 bucket dev-url enable <이름>` 로 공개 주소를 켠 뒤 storage 칸(r2_bucket·r2_prefix=episodes·media_base_url=공개주소/episodes)을 채워 (3) python scripts/new_project.py --defaults 로 나머지를 만들고 brand.name 은 "<내 채널 이름>" 으로 (4) 끝나면 kit.config.json 을 표로 요약해 보여주되 탭 id·키 값은 가려. characters 는 건드리지 마 — 다음에 내가 따로 시킬게.
+> clay-episode 스킬을 읽고 kit.config.json 을 채워줘. (1) `aside repl` 로 열린 탭을 읽어 flow.google.com 탭 id 를 FLOW_TAB 으로 영구 저장하고, studio.youtube.com 탭 id 를 channels.main.studio_tab_hint 에, 그 탭 주소의 UC… 를 channel_id 에 적어 (2) `python3 scripts/setup_r2.py <내가 정한 버킷 이름>` 을 돌려 R2 버킷·공개 주소·storage 칸을 채워(로그인이 안 돼 있다고 나오면 `npx wrangler login` 을 안내하고 기다려) (3) python scripts/new_project.py --defaults 로 나머지를 만들고 brand.name 은 "<내 채널 이름>" 으로 (4) 끝나면 kit.config.json 을 표로 요약해 보여주되 탭 id·키 값은 가려. characters 는 건드리지 마 — 다음에 내가 따로 시킬게.
 
-주의: `wrangler r2 bucket dev-url enable` 은 계정에 따라 대시보드 확인을 요구할 수 있습니다 — 그때는 0절 R2 줄의 ② 만 손으로.
+
 
 ---
 
