@@ -4,7 +4,7 @@
 대본 → Typecast 더빙 → 컷 계획 → Google Flow(Veo) 생성 → ffmpeg 조립 → 품질 게이트 → R2 → YouTube 까지
 반자동으로 만드는 스크립트와 Claude Code 스킬입니다. macOS/Windows.
 
-- `skills/clay-episode/SKILL.md` — 전체 절차. **0절이 Windows 준비물·Aside 설치·저장소 레이아웃**, 8절이 Aside 없을 때 Playwright 폴백.
+- `skills/clay-episode/SKILL.md` — 전체 절차. **0절이 Windows 준비물·Aside 설치·저장소 레이아웃**, 8절이 Aside 없을 때 Playwright 폴백. — 다운로드: https://aside.com/download (macOS·Windows, Windows 정식판 2026-09-14 출시; 무료 플랜으로 `aside repl` 사용 가능)
 - `scripts/` — 대본→더빙(`bake_lines.mjs`/`bake.mjs`) · 컷 계획(`top10_plan.py`) · 계획 검사(`cutplan_check.py`, `script_source.py`, `hanja_check.py`, `northstar_check.py`) · Flow 제출/다운로드(`aside_flow_submit.py`/`aside_flow_dl.py`) · 조립(`flow_assemble.py`) · 품질 게이트(`qa_gate.py`) · 썸네일(`make_thumb.py`/`thumb_lib.py`) · 검토 시트(`sheet.py`) · R2/메타 업로드(`prep_more.sh`/`prep_more.py`) · YouTube 업로드 큐(`aside_up.py`, `drain_uploads.sh`/`drain_uploads.py`, `youtube_upload.py`, `youtube_privacy.py`, `youtube_thumb.py`, `youtube_ab_mark.py`, `ship_short.py`) · Google Drive 재사용 라이브러리(`drive_backup_clips.py`) · 브라우저 추상화(`browser.py`, `pw_runner.mjs`)
 - `assets/brand/` — 로고·워드마크·인트로 영상. `remotion/public/fonts/` — Noto Sans CJK KR(Black/Medium)·Black Han Sans(전부 OFL).
 - `data/longform/prompts/CHARACTERS.json` — 컷 계획이 쓰는 공용 캐릭터 상수.

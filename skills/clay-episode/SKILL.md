@@ -25,7 +25,7 @@ description: 알리랑 클레이 애니 롱폼 1편(+45초 쇼츠+썸네일 3종
 
 macOS 는 brew 로 Python/Node/ffmpeg, `.sh` 는 zsh 로 그대로 돈다.
 
-### Aside 설치 (Flow·YouTube Studio 브라우저 자동화 — 1순위)
+### Aside 설치 (Flow·YouTube Studio 브라우저 자동화 — 1순위) — 다운로드: https://aside.com/download (macOS·Windows, Windows 정식판 2026-09-14 출시; 무료 플랜으로 `aside repl` 사용 가능)
 
 이 kit 의 브라우저 자동화는 **Aside 를 기본으로** 쓴다(`scripts/browser.py` 가 PATH 에서 `aside` 를 먼저 찾는다). Playwright 러너(8절)는 Aside 를 못 쓸 때의 폴백이다.
 
