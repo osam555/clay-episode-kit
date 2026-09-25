@@ -18,7 +18,7 @@ npx playwright install chromium
 python3 scripts/new_project.py          # 브랜드·캐릭터를 묻고 kit.config.json + 필요한 폴더를 만든다
 python3 scripts/new_episode.py <key> --word "<주제어>"   # 편 하나 시작
 ```
-그다음 `skills/clay-episode/SKILL.md` §A(새 주제·캐릭터로 시작하기)부터 따라간다. §0은 Windows 준비물·Aside 설치.
+처음이면 `skills/clay-episode/SKILL.md` 를 **0절 → A절 → B절(첫 편 30분 따라 하기)** 순서로 따라가세요 — B절은 예시 대본 「무지개는 왜 생길까」로 전 과정을 한 번 돕니다. §0은 Windows 준비물·Aside 설치.
 
 ## 설정 — `kit.config.json`
 
