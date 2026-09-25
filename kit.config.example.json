@@ -79,5 +79,11 @@
   "topic": {
     "kind": "generic",
     "card_style": "keyword"
+  },
+  "storage": {
+    "r2_bucket": "my-bucket",
+    "r2_prefix": "episodes",
+    "media_base_url": "https://pub-xxxxxxxx.r2.dev/episodes",
+    "_comment": "r2_bucket=R2 버킷 이름, r2_prefix=버킷 안 폴더, media_base_url=버킷 공개 URL(r2.dev 주소)+/prefix"
   }
 }

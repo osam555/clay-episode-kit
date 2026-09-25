@@ -18,9 +18,10 @@ ROOT = os.environ.get('ALLIRANG_ROOT', os.path.abspath(os.path.join(os.path.dirn
 FLOW_WORK = os.environ.get('FLOW_WORK', os.path.join(ROOT, 'scratch', 'flow_tools'))
 os.makedirs(FLOW_WORK, exist_ok=True)
 
-BUCKET = os.environ.get('R2_BUCKET', 'speed-listening-popsong')
-PREFIX = os.environ.get('R2_PREFIX', 'allirang')
-MEDIA_BASE = os.environ.get('MEDIA_BASE_URL', 'https://media.brainhz.life/allirang')
+import sys as _s; _s.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import kitconfig as _kc; _st = _kc.load().get('storage', {})
+BUCKET = os.environ.get('R2_BUCKET', _st.get('r2_bucket', 'speed-listening-popsong'))
+PREFIX = os.environ.get('R2_PREFIX', _st.get('r2_prefix', 'allirang'))
+MEDIA_BASE = os.environ.get('MEDIA_BASE_URL', _st.get('media_base_url', 'https://media.brainhz.life/allirang'))
 
 sys.path.insert(0, os.path.join(ROOT, 'scripts'))
 

@@ -43,7 +43,7 @@ description: 어떤 주제든(과학·역사·생활·영어·한자…) 클레�
 | ffmpeg | gyan.dev 에서 받아 `bin\` 을 PATH 에 추가 (`ffmpeg -version` 으로 확인) | `brew install ffmpeg` |
 | **Aside** (브라우저 자동화) | https://aside.com/download → 설치 → `aside login` | 동일 |
 | Typecast (더빙 목소리) | typecast.ai 가입 → API 키 → 프로젝트 폴더에 `.env.local` 파일 만들고 `TYPECAST_API_KEY=키` 한 줄. **이 파일은 절대 공유·커밋 금지** | 동일 |
-| Cloudflare R2 (영상 임시 저장소, 무료 티어면 충분) | `npx wrangler login`, 버킷 하나 만들고 공개 URL 켜기 | 동일 |
+| Cloudflare R2 (영상 임시 저장소, 무료 티어면 충분) | ① cloudflare.com 가입 → 왼쪽 메뉴 **R2 Object Storage** → **Create bucket**(이름 예 `my-videos`, 위치 자동) ② 버킷 → **Settings** → **Public access · R2.dev subdomain → Allow Access** → 나오는 `https://pub-….r2.dev` 주소 복사 ③ 터미널 `npx wrangler login`(브라우저에서 허용) ④ `kit.config.json` 의 `storage` 에 `r2_bucket`(버킷 이름)·`r2_prefix`(폴더, 예 `episodes`)·`media_base_url`(`https://pub-….r2.dev/episodes`) 기입 | 동일 |
 | Google Drive 앱 (선택, 재사용 라이브러리 백업) | 설치·로그인 후 `$env:DRIVE_LIB="G:\My Drive\clay-library"` | `export DRIVE_LIB=~/…/My Drive/clay-library` |
 
 Windows 에서 `.sh` 는 쓰지 않습니다 — 같은 이름의 `.py` 를 씁니다(`prep_more.py`, `drain_uploads.py`).
@@ -76,6 +76,7 @@ python3 scripts/new_project.py --defaults # 일단 자리표시자로 만들고 
    요령: 옷 색·머리 모양·피부색을 꼭 넣고, 다른 인물과 겹치지 않게. 한 번 정하면 바꾸지 마세요.
 2. **`brand`** — 이름, 워드마크 PNG, 인트로/엔딩 MP4(없으면 마법사가 임시로 만든 것을 씁니다), 사이트 URL, 해시태그, 설명 꼬리줄.
 3. **`channels`** — 유튜브 채널 ID(UC…)·재생목록·Aside 의 Studio 탭 id. 채널이 하나면 `main` 하나만.
+4. **`storage`** — R2 버킷 이름·폴더·공개 URL(0절 R2 줄). 업로드 스크립트가 여기서 읽습니다.
 
 `style.tail` 은 그림체입니다. 기본은 파스텔 클레이. 바꾸고 싶으면 이 한 문장만 바꾸면 전 컷에 적용됩니다.
 `topic.kind` 는 `generic`(기본) 그대로 둡니다. 한자 어원 편을 만들 때만 `hanja`.

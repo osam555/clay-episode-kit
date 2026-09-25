@@ -34,6 +34,7 @@ _DAD = ("a taller clay parent figure wearing a sky blue cardigan, a friendly cla
         "short black hair, two small round eyes and rosy cheeks")
 
 DEFAULTS = {
+    "storage": {"r2_bucket": "speed-listening-popsong", "r2_prefix": "allirang", "media_base_url": "https://media.brainhz.life/allirang"},
     "topic": {
         # "generic" — 임의 주제(과학·역사·일상·영단어 등), 카드는 {title, subtitle} 키워드 쌍.
         # "hanja"   — 한자 어원(알리랑 기본값), 카드는 {한자, 훈음}. hanja_check/northstar_check 의 기초한자 채점이 실제로 적용된다.
