@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """부모 탑10 컷 설계 생성기 — python3 top10_plan.py <ep>  → data/longform/prompts/<ep>.json"""
 import json, sys, os
-R = os.environ.get('ALLIRANG_ROOT', os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..','..')))
+R = os.environ.get('ALLIRANG_ROOT', os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 TAIL = ("Bright colorful low-poly 3D clay-like models with soft rounded edges, warm pastel palette of cream, sky blue, mint green and soft coral, "
         "on a clean pale cream studio background with a faint soft ground shadow. Soft warm studio lighting from upper left, gentle ambient occlusion, "
         "no harsh shadows. Clean playful explainer animation look for children, not photorealistic, not cinematic, not dark. "

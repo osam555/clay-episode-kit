@@ -2,8 +2,10 @@
    기본: data/longform/prompts/<ep>.json new_prompts 를 영상 모드로 제출. --thumbs: thumb a/b/c 를 이미지 모드로 제출(끝나면 영상 모드로 되돌림).
    프로젝트 URL 을 scratchpad/flow_projects.txt 에 기록하고 stdout 에 URL 출력."""
 import os
-R = os.environ.get('ALLIRANG_ROOT', os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..','..')))
-import json, subprocess, sys, time
+R = os.environ.get('ALLIRANG_ROOT', os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
+import json, sys, time, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from browser import repl as _browser_repl
 S=os.environ.get('FLOW_WORK', os.path.join(R,'scratch','flow_tools'))
 import os
 TAB=os.environ.get("FLOW_TAB","")
@@ -11,7 +13,7 @@ ep=sys.argv[1]; thumbs='--thumbs' in sys.argv
 p=json.load(open(f'{R}/data/longform/prompts/{ep}.json'))
 P=[p['thumb'][x]['flow'] for x in 'abc'] if thumbs else list(p['new_prompts'].values())
 def repl(js):
-    r=subprocess.run(['aside','repl',js],capture_output=True,text=True,timeout=600); return r.stdout+r.stderr
+    return _browser_repl(js, timeout=600)
 MODE_JS = '''await pg.evaluate(()=>{const m=[...document.querySelectorAll('button')].find(b=>/Video \\u00b7|Nano Banana/.test(b.textContent)); m.click();}); await sleep(1500);
 await pg.evaluate((w)=>{const r=[...document.querySelectorAll('[role=radio]')].find(e=>new RegExp(w).test(e.textContent)); r&&r.click();}, %s); await sleep(1500); await pg.keyboard.press('Escape'); await sleep(800);'''
 NEW = f'''const pg=await attachBrowserTab("{TAB}"); await pg.goto("https://flow.google.com/"); await sleep(5000);

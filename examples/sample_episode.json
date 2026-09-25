@@ -1,0 +1,38 @@
+{
+  "id": "sample_episode",
+  "word": "예시",
+  "track": "sino",
+  "status": "draft",
+  "title_ko": "예시 편 (만든 대사, 실제 대본 아님)",
+  "title_en": "Sample Episode (made-up dialogue, not a real script)",
+  "target_seconds": 150,
+  "dictNote": "이 파일은 스키마 예시용이다 — 실제 어원 문증은 들어 있지 않다.",
+  "sources": [],
+  "needs_verify": [],
+  "tts": {
+    "provider": "typecast",
+    "model": "ssfm-v30",
+    "voices": {
+      "narrator": "tc_REPLACE_NARRATOR_VOICE_ID",
+      "child": "tc_REPLACE_CHILD_VOICE_ID",
+      "adult": "tc_REPLACE_ADULT_VOICE_ID",
+      "friend": "tc_REPLACE_FRIEND_VOICE_ID"
+    }
+  },
+  "script_v2": {
+    "note": "예시 대사 3줄 — data/longform/README.md 의 script_v2.lines 스키마를 보여주려고 지어낸 것.",
+    "lines": [
+      { "ch": 0, "i": 1, "text": "[[child]] 이건 진짜 예시예요?", "g": 1 },
+      { "ch": 0, "i": 2, "text": "[[adult]] 그래, 스키마를 보여주려고 지어낸 대사야.", "g": 2 },
+      { "ch": 1, "i": 3, "text": "예시. 법식 예에 보일 시. 보여주려고 만든 본보기.", "g": 3 }
+    ]
+  },
+  "images": [
+    { "slot": 1, "prompt": "예시 프롬프트 — 실제 이미지 프롬프트는 원고 세션이 채운다.", "file": "01.png", "status": "wanted" }
+  ],
+  "yt_meta": {
+    "titles": ["예시 편 제목 후보 1", "예시 편 제목 후보 2", "예시 편 제목 후보 3"],
+    "description": "예시 설명. 실제 배포에는 쓰지 않는다.",
+    "tags": ["한자", "어원", "예시"]
+  }
+}

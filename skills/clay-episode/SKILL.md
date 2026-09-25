@@ -8,21 +8,50 @@ description: 알리랑 클레이 애니 롱폼 1편(+45초 쇼츠+썸네일 3종
 한 편 = 롱폼 16:9(2~3분, 인트로·엔딩 포함) + 세로 쇼츠 45초(첫 장면, 제목띠·로고) + 썸네일 3종(a/b/c).
 소요: 편당 Flow 크레딧 ≈110~130(6초 컷 10~12개 × 10, 썸네일 이미지는 무료), 사람 시간 ≈20분(대기 제외).
 
-## 0. 준비물
+## 0. 준비물 (Windows)
 
-| 것 | macOS | Windows |
-|---|---|---|
-| Python 3.12+, `pip install pillow numpy` | brew | python.org 설치, PATH 등록 |
-| Node 20+ (`npm ci`) | brew | nodejs.org |
-| ffmpeg/ffprobe | brew install ffmpeg | gyan.dev 빌드 → PATH |
-| `.sh` 스크립트 실행 | zsh | **Git Bash** 또는 WSL (PowerShell 불가) |
-| Typecast 키 | `.env.local` 의 `TYPECAST_API_KEY` — 절대 출력·커밋 금지 | 동일 |
-| Cloudflare R2 | `npx wrangler login` 1회 | 동일 |
-| Flow(labs.google/flow) 로그인 브라우저 | **Aside**(`aside` CLI, Playwright 내장) 또는 Claude Chrome 확장 | Aside Windows 빌드가 없으면 Playwright 로 `attachBrowserTab` 부분만 바꿔 쓴다(아래 8절) |
-| 유튜브 업로드 | Aside 로 Studio UI 조작(API 쿼터 안 씀) | 동일 |
+| 것 | 설치 |
+|---|---|
+| Python 3.12+ | python.org 설치 프로그램, "Add python.exe to PATH" 체크 |
+| `pip install -r requirements.txt` | pillow·numpy·google-auth(-oauthlib)·google-api-python-client |
+| Node 20+ | nodejs.org, 그 다음 `npm install` (Playwright 등) |
+| Playwright 브라우저 | `npx playwright install chromium` (Aside 폴백용 — 8절) |
+| ffmpeg/ffprobe | gyan.dev 빌드 다운로드 → 압축 풀고 `bin/` 을 PATH 에 등록 |
+| esbuild | `npm install` 이 `node_modules/@esbuild/win32-x64/esbuild.exe` 를 깐다. `bake.mjs` 가 자동으로 찾지만 안 되면 `$env:ESBUILD` 로 그 경로를 직접 준다 |
+| Typecast 키 | `.env.local` 에 `TYPECAST_API_KEY=...` — 절대 출력·커밋 금지 |
+| Cloudflare R2 | `npx wrangler login` 1회 |
+| `.sh` 스크립트 | Windows 는 `.sh` 대신 같은 이름의 `.py` 를 쓴다(`prep_more.py`, `drain_uploads.py`) — 이 kit 은 둘 다 있다 |
+| Drive 재사용 라이브러리 | Google Drive 데스크톱 앱 로그인 후 `$env:DRIVE_LIB = "G:\My Drive\allirang-library"` |
 
-환경변수(선택): `ALLIRANG_ROOT`(저장소 경로, 기본은 스크립트 위치에서 추정), `FLOW_WORK`(작업 파일 폴더, 기본 `scratch/flow_tools`), `FLOW_TAB`(Aside 의 Flow 탭 id).
-스크립트는 전부 `scripts/longform/flow/` 에 있다. Windows 는 `/tmp/...` 경로를 쓰는 곳(큐·로그)에 `FLOW_WORK` 아래 경로를 주면 된다.
+macOS 는 brew 로 Python/Node/ffmpeg, `.sh` 는 zsh 로 그대로 돈다.
+
+### Aside 설치 (Flow·YouTube Studio 브라우저 자동화 — 1순위)
+
+이 kit 의 브라우저 자동화는 **Aside 를 기본으로** 쓴다(`scripts/browser.py` 가 PATH 에서 `aside` 를 먼저 찾는다). Playwright 러너(8절)는 Aside 를 못 쓸 때의 폴백이다.
+
+1. Aside 앱을 설치한다 — 앱 다운로드 페이지 주소는 Aside 앱 안의 Help 메뉴나 `aside --help`/`aside guide` 출력에서 확인한다(버전마다 바뀔 수 있어 여기 박아 두지 않는다). Windows 빌드가 있는지도 그 페이지에서 확인 — 없으면 8절의 Playwright 러너로 간다.
+2. `aside login` 으로 로그인.
+3. `aside account` 로 쓸 계정을 고른다.
+4. Aside 안에서 탭 두 개를 연다 — `flow.google.com`(Flow)과 YouTube Studio 채널 페이지(채널마다 하나) — 열린 탭에서 Google 로그인을 한 번 해 둔다.
+5. 탭 id 를 얻는다:
+   ```bash
+   aside repl 'console.log(JSON.stringify((await listBrowserTabs()).map(t=>[t.targetId,t.url])))'
+   ```
+   출력에서 Flow 탭 id 를 `FLOW_TAB`, Studio 채널 탭 id 를 `YT_CHANNELS` 의 값으로 쓴다(1절 참고, 형식은 `{"<채널키>": ["<탭id>", "<채널ID UC…>", "<재생목록 이름>"]}`).
+
+환경변수(선택): `ALLIRANG_ROOT`(저장소 경로, 기본은 스크립트 위치에서 추정), `FLOW_WORK`(작업 파일 폴더, 기본 `scratch/flow_tools`), `FLOW_TAB`(Aside 의 Flow 탭 id), `YT_CHANNELS`, `DRIVE_LIB`.
+스크립트는 전부 `scripts/` 에 있다. Windows 는 `/tmp/...` 경로를 쓰는 곳(큐·로그)에 `FLOW_WORK` 아래 경로를 주면 된다(PowerShell 예: `$env:FLOW_WORK = "$PWD\scratch\flow_tools"`).
+
+### 편 하나의 저장소 레이아웃
+
+```
+data/longform/<key>.json          정본 — script_v2.lines(대사) · tts.voices · images[] · yt_meta 등. 스키마 예시: examples/sample_episode.json
+data/longform/prompts/<key>.json  top10_plan.py 가 생성하는 컷 계획(Flow 프롬프트)
+scratch/flow_<key>/                작업 파일 — n01.wav…(더빙), lines.json, <key>_short.mp4
+assets/flow/<key>/                 Flow 가 뱉은 컷 mp4/이미지, thumb/{a,b,c}.jpg
+assets/longform/<key>/thumb/       make_thumb.py 산출물(final-a/b/c.png)
+remotion/out/<key>_deploy.mp4      flow_assemble.py --deploy 산출물
+```
 
 ## 1. 대본 → 더빙
 
@@ -31,13 +60,13 @@ description: 알리랑 클레이 애니 롱폼 1편(+45초 쇼츠+썸네일 3종
 ```bash
 export ESBUILD=$PWD/node_modules/@esbuild/darwin-arm64/bin/esbuild   # mac (Apple Silicon). Windows 는 node_modules/@esbuild/win32-x64/esbuild.exe
 mkdir -p scratch/flow_<key>/_old_wav && mv scratch/flow_<key>/n*.wav scratch/flow_<key>/_old_wav/ 2>/dev/null
-node scripts/longform/bake_lines.mjs <key>        # Typecast → scratch/flow_<key>/n01.wav … + lines.json
+node scripts/bake_lines.mjs <key>        # Typecast → scratch/flow_<key>/n01.wav … + lines.json
 ```
 로그 마지막 줄 `<key>: N문장` 이 대본 줄 수와 같아야 한다.
 
 ## 2. 컷 계획 (사람이 쓰는 유일한 창작 단계)
 
-`scripts/longform/flow/top10_plan.py` 의 `PLANS['<key>'] = dict(new=…, map=…, thumb=TH(…))` 블록을 `def build` 앞에 추가한다. 기존 블록(예: `fire_water`, `person_life`)을 그대로 본뜬다.
+`scripts/top10_plan.py` 의 `PLANS['<key>'] = dict(new=…, map=…, thumb=TH(…))` 블록을 `def build` 앞에 추가한다. 기존 블록(예: `fire_water`, `person_life`)을 그대로 본뜬다.
 
 - `new`: 컷 10~12개. 사람 나오는 컷은 `scene(f"{C2} … {MP} …")`, 사물만은 `diagram("…")`. **사람은 반드시 상수만**({C2} 아이·{MP} 엄마·{DP} 아빠·{F2} 친구·{TEACH} 선생님·{GRM} 할머니) — 다른 말로 사람을 쓰면 `cutplan_check` 가 떨어뜨린다(편마다 캐릭터가 달라짐).
 - `map`: 대본 줄 번호 1..N 전부에 컷 키. 「같이 볼까요?」·「…라고 풀어요」 줄은 글자 뜻을 보여 주는 `diagram` 컷.
@@ -45,8 +74,8 @@ node scripts/longform/bake_lines.mjs <key>        # Typecast → scratch/flow_<k
 - `thumb=TH(a_flow, a_head, panel, b_flow, b_head, doc, c_flow, c_bg, c_head)`: a=아이 미디엄샷(오른쪽), b=엄마+문서카드(`{LT}`), c=단색 배경 얼굴 클로즈업. 헤드라인 2줄 합쳐 14자 이하, 펀치라인 폰트 ≥120.
 
 ```bash
-python3 scripts/longform/flow/top10_plan.py <key>       # → data/longform/prompts/<key>.json
-python3 scripts/longform/cutplan_check.py <key>         # 8.0 이상 통과할 때까지 ✗ 항목 고친다
+python3 scripts/top10_plan.py <key>       # → data/longform/prompts/<key>.json
+python3 scripts/cutplan_check.py <key>         # 8.0 이상 통과할 때까지 ✗ 항목 고친다
 ```
 
 ## 3. Flow 생성 (Aside)
@@ -54,8 +83,8 @@ python3 scripts/longform/cutplan_check.py <key>         # 8.0 이상 통과할 �
 Flow 는 공개 API 가 없어 브라우저 UI 를 자동화한다. Aside 에 Google 로그인된 Flow 탭이 하나 있어야 한다(`aside repl 'console.log(JSON.stringify(await listBrowserTabs()))'` 로 id 확인 → `FLOW_TAB`).
 
 ```bash
-python3 scripts/longform/flow/aside_flow_submit.py <key>            # 새 프로젝트 + 영상 컷 전부 제출 (URL 출력·flow_projects.txt 기록)
-python3 scripts/longform/flow/aside_flow_submit.py <key> --thumbs   # 썸네일 3장 이미지 모드로 제출 후 영상 모드 복귀
+python3 scripts/aside_flow_submit.py <key>            # 새 프로젝트 + 영상 컷 전부 제출 (URL 출력·flow_projects.txt 기록)
+python3 scripts/aside_flow_submit.py <key> --thumbs   # 썸네일 3장 이미지 모드로 제출 후 영상 모드 복귀
 ```
 - 여러 편이면 영상 제출을 전부 먼저, 썸네일은 뒤에 몰아서(모드 설정이 계정 공통).
 - 한 번에 24장 이상 몰아 넣으면 「unusual activity — Failed」가 몇 개 뜬다(과금 없음) → 1분 뒤 타일의 Retry.
@@ -64,7 +93,7 @@ python3 scripts/longform/flow/aside_flow_submit.py <key> --thumbs   # 썸네일 
 ## 4. 다운로드·배치
 
 ```bash
-python3 scripts/longform/flow/aside_flow_dl.py <project_url> <outdir>     # 영상 720p / 이미지 1K, 파일명 = Flow 자동 캡션
+python3 scripts/aside_flow_dl.py <project_url> <outdir>     # 영상 720p / 이미지 1K, 파일명 = Flow 자동 캡션
 ```
 캡션을 프롬프트 문구와 대조해 `assets/flow/<key>/<컷키>.mp4`, 썸네일은 `assets/flow/<key>/thumb/{a,b,c}.jpg` 로 옮긴다. 헷갈리면 `ffmpeg -ss 2 -i 파일 -frames:v 1 x.png` 로 한 프레임 본다.
 - 개수 = `new_prompts` 키 수여야 한다. Flow 가 조용히 빼먹는 컷(10개 중 1개꼴)은 그 프롬프트만 같은 프로젝트에 다시 제출.
@@ -74,26 +103,32 @@ python3 scripts/longform/flow/aside_flow_dl.py <project_url> <outdir>     # 영�
 ## 5. 썸네일·조립·검사
 
 ```bash
-python3 scripts/longform/make_thumb.py <key>                 # final-a/b/c.png, 셋 다 「썸네일 검사 PASS」
-python3 scripts/longform/flow_assemble.py <key> --deploy     # 롱폼 → remotion/out/<key>_deploy.mp4 (5~10분)
-python3 scripts/longform/flow_assemble.py <key> --short      # 세로 쇼츠 → scratch/flow_<key>/<key>_short.mp4
-python3 scripts/longform/qa_gate.py post <key>               # 8.0 이상
-python3 scripts/longform/flow/sheet.py <key>                 # 12프레임 시트 → 눈으로 한 번: 글자·어두움·카드가 얼굴 가림·캐릭터 이탈
+python3 scripts/make_thumb.py <key>                 # final-a/b/c.png, 셋 다 「썸네일 검사 PASS」
+python3 scripts/flow_assemble.py <key> --deploy     # 롱폼 → remotion/out/<key>_deploy.mp4 (5~10분)
+python3 scripts/flow_assemble.py <key> --short      # 세로 쇼츠 → scratch/flow_<key>/<key>_short.mp4
+python3 scripts/qa_gate.py post <key>               # 8.0 이상
+python3 scripts/sheet.py <key>                 # 12프레임 시트 → 눈으로 한 번: 글자·어두움·카드가 얼굴 가림·캐릭터 이탈
 ```
 
 ## 6. R2 · 유튜브
 
 ```bash
-zsh scripts/longform/flow/prep_more.sh <key>     # R2 에 video/short/thumb_a 업로드 + 업로드 메타(yt_meta.json)
+# macOS(zsh 있음)
+zsh scripts/prep_more.sh <key>     # R2 에 video/short/thumb_a 업로드 + 업로드 메타(yt_meta.json)
 echo "<key> long allirang"  >> $FLOW_WORK/aside_queue.txt     # 큐: <key> <long|short> <allirang|daechung>
 echo "<key> short allirang" >> $FLOW_WORK/aside_queue.txt
 echo "<key> long daechung"  >> $FLOW_WORK/aside_queue.txt
 echo "<key> short daechung" >> $FLOW_WORK/aside_queue.txt
-zsh scripts/longform/flow/drain_uploads.sh &     # Aside 로 Studio 업로드(제목·설명·태그·재생목록·AI 아니오·공개), 편 JSON 에 ID 기록
+zsh scripts/drain_uploads.sh &     # Aside 로 Studio 업로드(제목·설명·태그·재생목록·AI 아니오·공개), 편 JSON 에 ID 기록
+
+# Windows(또는 sed/zsh 없이 어디서나) — 같은 일을 하는 파이썬 판
+python3 scripts/prep_more.py <key>
+"<key> long allirang" | Out-File -Append -Encoding utf8 $env:FLOW_WORK\aside_queue.txt
+python3 scripts/drain_uploads.py     # 백그라운드로 돌리려면 Start-Process 나 별 터미널 탭
 ```
 - 채널: 환경변수 `YT_CHANNELS='{"allirang": ["<aside Studio 탭 id>", "<채널 ID UC…>", "<재생목록 이름>"], "daechung": [...]}'` 로 준다. Aside 에 각 채널 Studio 탭이 열려 있어야 한다.
 - 채널당 **하루 업로드 한도**가 있다(≈20~25건). 걸리면 다이얼로그가 「Video link — Creating link…」에서 멈춘다 → 드레이너가 그 채널을 건너뛰고 나머지를 큐 파일에 남긴다. 다음 날 다시 돌린다.
-- **구글 드라이브 재사용 라이브러리**: `prep_more.sh` 가 끝에 `python3 scripts/longform/drive_backup_clips.py <key>` 를 백그라운드로 띄운다 → `My Drive/allirang-library/`(01 Flow 원본 · 02 자막없는 · 03 배포본 · 04 썸네일 · 05 음성 + INDEX.csv/EPISODES.csv). Google Drive 데스크톱 앱이 켜져 있어야 실제로 올라간다(Windows 는 `DRIVE_LIB=G:\My Drive\allirang-library`). 자막없는 판(02)이 필요하면 조립 때 `flow_assemble.py <key> --clean` 을 한 번 더.
+- **구글 드라이브 재사용 라이브러리**: `prep_more.sh` 가 끝에 `python3 scripts/drive_backup_clips.py <key>` 를 백그라운드로 띄운다 → `My Drive/allirang-library/`(01 Flow 원본 · 02 자막없는 · 03 배포본 · 04 썸네일 · 05 음성 + INDEX.csv/EPISODES.csv). Google Drive 데스크톱 앱이 켜져 있어야 실제로 올라간다(Windows 는 `DRIVE_LIB=G:\My Drive\allirang-library`). 자막없는 판(02)이 필요하면 조립 때 `flow_assemble.py <key> --clean` 을 한 번 더.
 - 편 JSON: `status: published`, `video: https://media.brainhz.life/allirang/<key>/video.mp4` 로 바꾼 뒤 `npm run build && vercel deploy --prod --yes`.
 
 ## 7. 규칙 요약(어기면 반려)
@@ -104,10 +139,16 @@ zsh scripts/longform/flow/drain_uploads.sh &     # Aside 로 Studio 업로드(�
 - 어두운 이미지 금지, 사물 위 글자 금지
 - 배포 전 실제 프레임 시트로 자체 리뷰(`sheet.py`) — 오쌤은 완성 영상만 본다
 
-## 8. Aside 가 없을 때 (Windows 등)
+## 8. Aside 가 없을 때 — Playwright 폴백
 
-`aside_flow_submit.py`·`aside_flow_dl.py`·`aside_up.py` 는 전부 `aside repl '<JS>'` 를 부르고, JS 안에서 `attachBrowserTab(id)` 로 Playwright `page` 를 얻는 구조다.
-Playwright 를 직접 쓰려면 `npx playwright codegen --save-storage=auth.json flow.google.com` 으로 로그인 상태를 저장한 뒤, 같은 JS 본문을 `page` 에 대해 실행하는 러너 하나만 만들면 나머지는 그대로다(다운로드는 `page.waitForEvent('download')` → `download.path()`).
+`aside_flow_submit.py`·`aside_flow_dl.py`·`aside_up.py` 는 브라우저를 직접 부르지 않는다 — 전부 `scripts/browser.py` 의 `repl(js)` 를 거친다.
+`browser.py` 는 PATH 에 `aside` 가 있으면 `aside repl '<JS>'` 로 그대로 넘기고(1순위, 0절), 없으면 `node scripts/pw_runner.mjs` 를 스폰해 Playwright 로 같은 JS 환경(`attachBrowserTab(id)`, `openTab(url)`, `listBrowserTabs()`, `sleep(ms)`, `fs`)을 흉내 낸다 — 기존 JS 스니펫이 거의 그대로 돈다.
+
+Playwright 러너를 처음 쓸 때:
+1. `npm install && npx playwright install chromium`
+2. `python3 scripts/browser.py 'console.log(JSON.stringify(await listBrowserTabs()))'` 를 한 번 돌리면 Chromium 창이 뜬다 — 그 창에서 Google(Flow, YouTube Studio)에 수동 로그인해 둔다.
+3. 로그인 세션은 `FLOW_WORK/pw-profile`(영속 프로필)에 저장되어 다음 실행부터 재사용된다. `FLOW_TAB`/`YT_CHANNELS` 의 탭 id는 Playwright 경로에서는 URL 부분 문자열이나 숫자 인덱스로 줘도 된다(`pw_runner.mjs`의 `attachBrowserTab` 참고).
+
 Chrome 확장(Claude in Chrome)으로도 같은 JS 를 `javascript_tool` 로 넣어 쓸 수 있다 — 단 한 호출에 컷 4개까지(45초 타임아웃).
 
 ## 9. 토큰(클로드 크레딧) 아끼는 법 — 2026-09-25 하루에 배운 것

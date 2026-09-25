@@ -1,0 +1,62 @@
+{
+ "note": "알리랑 flow 편 공용 캐릭터 정본 — 모든 컷 프롬프트에 이 문구를 그대로 넣어 편·컷마다 같은 캐릭터가 나오게 한다. 오쌤 2026-09-20 「프롬프트 시스템에 캐릭터 프롬프트도 포함」.",
+ "style_tail": "kid_tail() (flowmaker/style.py) — bright colorful low-poly clay, warm pastel, cream studio bg, no dark. 모든 kid 컷 꼬리에 그대로 붙인다.",
+ "characters": {
+  "child": {
+   "id": "haru",
+   "role": "주인공 아이(학생)",
+   "prompt": "a round clay child with a simple round face, two small dark eyes and rosy cheeks, wearing a blue shirt",
+   "note": "심#2·day 주인공. 파란 셔츠·둥근 얼굴·작은 검은 눈·발그레한 볼."
+  },
+  "child2": {
+   "id": "duri",
+   "role": "친구(둘째 아이)",
+   "prompt": "a second round clay child with a simple round face, two small dark eyes and rosy cheeks, wearing a coral dress",
+   "note": "친구 편 상대. 산호색 원피스."
+  },
+  "two_children": {
+   "role": "두 아이 함께",
+   "prompt": "the same two round clay children as before, each with a simple round face, two small dark eyes and rosy cheeks, one wearing a blue shirt and one wearing a coral dress",
+   "note": "경쟁·우정 장면. 반드시 'the same ... as before' 로 시작해 연속성 고정."
+  },
+  "parent": {
+   "role": "엄마/부모",
+   "prompt": "a taller clay parent figure",
+   "note": "엄마 한 줄 컷. 아이보다 크고, 얼굴 단순. 안경(day N9)은 선택."
+  },
+  "teacher": {
+   "role": "선생님",
+   "prompt": "a clay teacher figure",
+   "note": "day 편(Ngwan)이 이미 이 문구로 썼다. 2026-09-22 정본에 올림 — D 학교 말·H 가족 시리즈에 계속 나온다. 아이보다 크고 얼굴 단순."
+  },
+  "two_parents": {
+   "role": "엄마와 아빠, 두 부모",
+   "prompt": "two taller clay parent figures side by side, a taller clay parent figure wearing a mint green cardigan and a taller clay parent figure wearing a sky blue cardigan",
+   "note": "couple 편(2026-09-22)이 처음 썼다. 정본 parent 문구를 두 번 품고 있어 검사기가 통과한다. 민트=엄마, 하늘색=아빠로 고정 — H 가족 시리즈에서 같은 옷."
+  },
+  "dog": {
+   "id": "baduk",
+   "role": "서당 개(개 한 마리)",
+   "prompt": "a medium-sized three-year-old grown-up clay dog, a friendly Korean Jindo-style dog colored plain cream all over, with upright pointed cream ears, a curled cream tail, no spots, no patches and a small black nose",
+   "note": "2026-09-23 gae 편. 오쌤 「개가 너무 작다, 3살 개로, 2마리 개가 모습이 다르다, 일치하게」 — 강아지 말고 다 큰 개 한 마리로 고정. 개가 나오는 모든 컷·썸네일에 이 문구를 그대로."
+  },
+  "mom": {
+   "id": "mom",
+   "role": "엄마(아이 엄마)",
+   "prompt": "a taller clay parent figure wearing a mint green cardigan, a friendly clay mother with a simple round human face, short black bob hair, two small dark eyes and rosy cheeks",
+   "note": "2026-09-23 gae 편에서 확정 — 정본 parent 문구만으로는 엄마가 어린 여자아이·아빠·덩어리처럼 나왔다. 엄마가 말하는 컷은 이 문구(단발·민트 가디건)."
+  },
+  "two_children_hair": {
+   "role": "두 아이 함께 — 머리·피부 지정판(권장)",
+   "prompt": "the same two round clay children as before, each with a simple round face, two small dark eyes and rosy cheeks, both with light peach skin, the child in the blue shirt with a short straight black bob haircut and the child in the coral dress with black hair tied in two small buns, one wearing a blue shirt and one wearing a coral dress",
+   "note": "2026-09-23 A시리즈: two_children 문구만 쓰면 갈색 머리·다른 피부가 나오고, 「the girl's hair in buns」만 쓰면 둘 다 똥머리가 된다. 새 컷은 이 문구를 쓴다."
+  }
+ },
+ "rules": [
+  "새 컷 프롬프트의 사람은 위 prompt 문구를 복사해 쓴다(임의 서술 금지) — 이래야 편·컷 사이 캐릭터가 안 튄다.",
+  "재생성(같은 컷 다시 뽑기)에도 같은 문구를 그대로 — flow 는 문구가 같아도 매번 조금 다르게 나오지만, 문구가 다르면 완전히 딴 캐릭터가 된다.",
+  "실사 사람 클로즈업 금지(손 기형). 사람은 전부 clay 캐릭터.",
+  "얼굴 없는 마네킹 대신 '눈 두 개·입 없는 단순 얼굴'의 clay 아이.",
+  "정본에 없는 인물이 필요하면 임의로 쓰지 말고 여기 먼저 더한다 — cutplan_check.py 가 막는다. (2026-09-22 day/Ngwan 의 「clay teacher figure」가 이렇게 잡혀 정본이 됐다)"
+ ]
+}

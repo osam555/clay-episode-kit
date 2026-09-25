@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """알리랑 영상 재사용 라이브러리를 구글 드라이브에 만든다(오쌤 2026-09-24 「재활용 가능하게, 충분한 인덱스, 원본·자막없는·자막 후로 구별」).
 
-  python3 scripts/longform/drive_backup_clips.py            # 전 편
-  python3 scripts/longform/drive_backup_clips.py gan day     # 몇 편만(색인은 늘 전체를 다시 쓴다)
+  python3 scripts/drive_backup_clips.py            # 전 편
+  python3 scripts/drive_backup_clips.py gan day     # 몇 편만(색인은 늘 전체를 다시 쓴다)
 
 My Drive/allirang-library/
   01_flow-originals/<편>/<클립>.mp4   Flow 에서 받은 원본 클립(이름 = 컷 키), thumb/ = 썸네일용 히어로 컷
@@ -18,7 +18,7 @@ My Drive/allirang-library/
 import csv, glob, json, os, re, subprocess, sys
 
 import os
-ROOT = os.environ.get('ALLIRANG_ROOT', os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..')))
+ROOT = os.environ.get('ALLIRANG_ROOT', os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 LIB = os.environ.get('DRIVE_LIB', os.path.expanduser('~/My Drive/allirang-library'))   # Windows: G:\My Drive\allirang-library
 TAIL = ' Bright colorful low-poly'
 
@@ -185,7 +185,7 @@ README = """# 알리랑 영상 재사용 라이브러리
 ## 규칙
 - `character_consistency`: canon = 정본 아이·엄마 얼굴(주인공 자리에 재사용 가능), other = 마음 시리즈 친구 컷(얼굴이 다름 — 주인공 대사엔 쓰지 말 것), none = 사람 없음(어디든).
 - 주인공 아이(파란 셔츠)·엄마(민트 가디건·단발)는 CHARACTERS 정본 문구로 뽑은 컷이 `cast` 에 child·mom 으로 잡힌다 — 주인공 대사 자리에 다시 쓸 수 있다.
-- 새 편을 만들면 `python3 scripts/longform/drive_backup_clips.py <편>` 한 번이면 이 폴더와 색인이 갱신된다(자막없는 판은 `flow_assemble.py <편> --clean` 먼저).
+- 새 편을 만들면 `python3 scripts/drive_backup_clips.py <편>` 한 번이면 이 폴더와 색인이 갱신된다(자막없는 판은 `flow_assemble.py <편> --clean` 먼저).
 """
 
 if __name__ == '__main__':

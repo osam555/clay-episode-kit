@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """컷 설계안 검사 — 다른 세션이 만든 초안을 받을 때 통과시킬 기준 (분업 게이트).
 
-  python3 scripts/longform/cutplan_check.py <key> [<key> ...]      # <key>_draft.json 을 본다
-  python3 scripts/longform/cutplan_check.py --all                  # prompts/*_draft.json 전부
-  python3 scripts/longform/cutplan_check.py <key> --promote        # 통과하면 _draft 를 벗겨 정본으로
+  python3 scripts/cutplan_check.py <key> [<key> ...]      # <key>_draft.json 을 본다
+  python3 scripts/cutplan_check.py --all                  # prompts/*_draft.json 전부
+  python3 scripts/cutplan_check.py <key> --promote        # 통과하면 _draft 를 벗겨 정본으로
 
 검사하는 것 — 사람이 눈으로 못 잡는 것만:
   1) 문장을 다 덮었나          map 이 lines.json 의 모든 g 를 갖고 있나, 없는 문장·헛문장 번호
@@ -240,7 +240,7 @@ def main():
             # 컷은 대본 게이트를 통과한 대본에만 쓴다(Flow 크레딧) — 2026-09-23 고아 편이 대본 검사 없이 컷까지 갔다
             gok, why = script_source.gate(key)
             if not gok:
-                print(f'   ⛔ 승격 보류 — {why}. 먼저 python3 scripts/longform/qa_gate.py pre {key}')
+                print(f'   ⛔ 승격 보류 — {why}. 먼저 python3 scripts/qa_gate.py pre {key}')
                 allpass = False
                 continue
             src, dst = f'{PROMPTS}/{key}_draft.json', f'{PROMPTS}/{key}.json'

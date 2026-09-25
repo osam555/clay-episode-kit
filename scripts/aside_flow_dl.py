@@ -1,7 +1,9 @@
 """aside 로 Flow 프로젝트의 타일 전부 다운로드 — python3 aside_flow_dl.py <project_url> <outdir>  (영상 720p, 이미지 1K; ~/Downloads 에 떨어진 뒤 outdir 로 옮김)"""
 import os
-R = os.environ.get('ALLIRANG_ROOT', os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..','..')))
-import subprocess, sys, json, os, glob, time, shutil
+R = os.environ.get('ALLIRANG_ROOT', os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
+import sys, json, os, glob, time, shutil
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from browser import repl as _browser_repl
 url, out = sys.argv[1], sys.argv[2]; os.makedirs(out, exist_ok=True)
 import os
 TAB = os.environ.get("FLOW_TAB","")
@@ -9,7 +11,7 @@ LIST = f'''const pg=await attachBrowserTab("{TAB}"); await pg.goto("{url}"); awa
 const t=await pg.evaluate(()=>[...new Set([...document.querySelectorAll('*')].filter(e=>e.children.length==0&&/^[A-Z0-9][a-z0-9A-Z]* /.test(e.textContent.trim())&&e.textContent.trim().length<60).map(e=>e.textContent.trim()))].filter(t=>!/^(All media|Start|Google|Videos|Images|Characters|Scenes|Tools|Trash|Collapse|What|Agent|Video|Tile|More|New|Sep|Prompt|Learn|No thanks|Skip|Add|View)/.test(t)));
 console.log("TITLES"+JSON.stringify(t));'''
 def repl(js):
-    p = subprocess.run(['aside', 'repl', js], capture_output=True, text=True, timeout=300); return p.stdout + p.stderr
+    return _browser_repl(js, timeout=300)
 r = repl(LIST); titles = json.loads(r.split('TITLES')[1].split('\n')[0])
 print(len(titles), 'tiles')
 DL = '''const pg=await attachBrowserTab("%s"); const T=%s; const out=[];

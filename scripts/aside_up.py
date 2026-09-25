@@ -1,10 +1,11 @@
 import os
-R = os.environ.get('ALLIRANG_ROOT', os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..','..')))
+R = os.environ.get('ALLIRANG_ROOT', os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 #!/usr/bin/env python3
 """Studio 업로드를 aside repl 로 — python3 aside_up.py <ep> <long|short> <allirang|daechung>"""
-import json, re, subprocess, sys, time
+import json, re, sys, time
 sys.path.insert(0, os.path.join(R,'scripts'))
 import youtube_upload as Y
+from browser import repl as _browser_repl
 S = os.environ.get('FLOW_WORK', os.path.join(R,'scratch','flow_tools'))
 CH = json.loads(os.environ.get('YT_CHANNELS', '{}'))   # {'<채널키>': ['<aside Studio 탭 id>', '<채널 ID UC…>', '<재생목록 이름>']}
 ep, kind, chn = sys.argv[1:4]
@@ -47,9 +48,7 @@ const st=await pg.evaluate(()=>document.body.innerText.match(/Video (published|p
 console.log("PUB",b,JSON.stringify(st));
 await pg.evaluate(()=>{{const x=[...document.querySelectorAll("ytcp-button, button")].find(b=>b.innerText.trim()==="Close"&&b.offsetParent); if(x) x.click();}});'''
 def run(js):
-    p = subprocess.run(['aside', 'repl', js], capture_output=True, text=True, timeout=170)
-    return p.stdout + p.stderr
-import os
+    return _browser_repl(js, timeout=170)
 if os.environ.get('VID'):
     oa='youtu.be/'+os.environ['VID']
 else:

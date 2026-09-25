@@ -1,5 +1,10 @@
 scratch/
 *.mp4
+!assets/brand/*.mp4
 *.wav
 .env*
 __pycache__/
+node_modules/
+scripts/pw-profile/
+*.pyc
+.DS_Store

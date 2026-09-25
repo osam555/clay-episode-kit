@@ -1,0 +1,16 @@
+{
+  "name": "clay-episode-kit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "클레이 애니 롱폼 편 제작 키트 — 대본 더빙(Typecast)부터 Flow 브라우저 자동화까지.",
+  "scripts": {
+    "postinstall": "echo 'Playwright 브라우저는 따로 설치: npx playwright install chromium'"
+  },
+  "dependencies": {
+    "playwright": "^1.47.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}
