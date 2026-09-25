@@ -53,6 +53,51 @@ assets/longform/<key>/thumb/       make_thumb.py 산출물(final-a/b/c.png)
 remotion/out/<key>_deploy.mp4      flow_assemble.py --deploy 산출물
 ```
 
+## A. 새 주제·캐릭터로 시작하기
+
+이 kit 은 원래 알리랑(한자 어원)용으로 만들었지만, `kit.config.json` 하나로 다른 주제·캐릭터·브랜드에도 그대로 쓴다.
+모든 스크립트가 캐릭터 문구·스타일 꼬리·채널·사이트 URL·해시태그를 `kit.config.json`(없으면 `kit.config.example.json`, 그것도 없으면 `scripts/kitconfig.py` 의 기본값=알리랑)에서 읽는다.
+
+1. **`python3 scripts/new_project.py` 먼저 돌린다.** 브랜드 이름·사이트 URL·해시태그·나레이션 언어·캐릭터 역할(아이/엄마/아빠/친구/할아버지/할머니/선생님)을 물어보고
+   `kit.config.json` 을 쓰고 `data/longform`·`assets/brand`·`scratch` 등 필요한 폴더를 만든다. 브랜드 에셋(워드마크·인트로)이 없으면 Pillow·ffmpeg 로 자리표시자를 만들어 준다(없으면 경고만 하고 건너뛴다).
+   질문 없이 자리표시자 값으로 바로 돌리려면 `--defaults`.
+
+2. **`kit.config.json` 을 손으로 다듬는다.** 프롬프트가 실제로 참조하는 건 `characters` 칸뿐이다 — 역할마다 시각적 특징(옷 색·머리·표정)을 고정 문구로 써 둔다.
+   같은 인물이 편·컷마다 다르게 나오면 안 되므로, `CH`(아이)·`MOM`·`DAD`·`FR`(친구)·`GRAND`·`GRM`·`TEACH` 같은 역할 키에 **항상 같은 문구**를 쓴다. `channels`(유튜브 채널 ID·토큰 경로)·`tts.voices`(Typecast 보이스 id)도 여기서 채운다.
+
+3. **대본을 쓴 다음 §1 로 간다.** 대본 템플릿은 아래 구조를 쓴다 — 롱폼 파일럿들에서 잘 먹힌 순서다.
+
+### 대본 템플릿 (23~28줄, 나레이션 ≤2:30)
+
+1. 아이의 엉뚱한 질문(훅) 1줄
+2. 어른/친구 반응 2줄
+3. 「같이 볼까요?」 1줄
+4. 글자 풀이 1~2줄 「…라고 풀어요」 — **한자 편에만 쓰는 선택 단계다.** 한자가 아닌 주제면 통째로 뺀다.
+5. 낱말 3~6개, 각 1줄 「A. B 에 C. 뜻.」 형식 + 아이·친구 리액션을 사이사이에
+6. 반전/주의 1~2줄
+7. 복습 나열 2줄 「…, …. 다 X.」
+8. 콜백 마무리 1줄
+
+화자 태그는 `[[child]]` `[[adult]]` `[[friend]]` 를 줄 앞에 붙인다(목소리를 고르는 표시일 뿐, 자막에는 안 나간다 — `flow_assemble.py` 가 뗀다).
+`data/longform/<key>.json` 의 `script_v2.lines` 에 `{ "ch": 0, "i": 1, "text": "[[child]] …", "g": 1 }` 형식으로 넣는다(`examples/sample_episode.json` 참고).
+
+썸네일 `thumb.a.panel`(우상단 대각 재료)도 기본은 **키워드판**(주제어 두 줄, 예 `['무지개','빛의 비밀','right']`)이다 — 한자판(`['漢字','훈음','right']`)은 `topic.kind: "hanja"` 일 때의 변형일 뿐, 형식(세 값: 첫 줄·둘째 줄·`"right"`)은 같다.
+
+### 카드(한자판) 칸 — 한자 아닌 주제는 이렇게
+
+카드는 `scratch/flow_<key>/cards.json`(또는 `prompts/<key>.json` 의 `cards_full`)의 `CARD` 에 `{ "<문장번호 g>": ["첫째줄", "둘째줄"] }` 형식으로 들어간다 —
+`flow_assemble.py` 가 `CARD={int(k):tuple(v) for k,v in _cards['CARD'].items()}` 로 읽어 화면에 두 줄짜리 카드로 그린다(`bake_lines.mjs`/`save_prompts` 계열이 만든다).
+한자 편은 `["漢字", "한글음"]` 을 쓰지만, **형식 자체는 한자 전용이 아니다** — 다른 주제는 그 자리에 아무 두 낱말 키워드 쌍(예: `["원인", "결과"]`, `["Before", "After"]`)을 넣으면 된다.
+`HILITE`(그 줄 자막에서 금색으로 강조할 낱말) · `SPAN`(카드를 몇 줄 더 유지할지) · `SIDE`(心/力 처럼 좌우 배치) 도 같은 파일에 있다 — SIDE 는 한자 부수 놀이용이라 다른 주제는 대개 안 쓴다.
+
+### QA 게이트가 잡는 것 (`qa_gate.py` · `cutplan_check.py`)
+
+- 어둡고 무서운 낱말(`dark`·`night`·`gloomy`·`ominous` 등) 금지 — 밝은 톤만.
+- 장면 프롬프트 안에 글자를 그리게 하면 안 된다(`sign reading`·`text saying` 등) — 한자판·자막은 오버레이 몫이지 장면 안 글자가 아니다.
+- 사람이 나오는 컷은 **반드시 `kit.config.json` 의 `characters` 문구를 그대로** 쓴다 — 임의 서술 금지, 안 그러면 컷마다 딴 사람이 나온다.
+- 헤드라인(썸네일) ≤14자, 2줄까지.
+- 카드 줄 형식은 위 「A. B 에 C. 뜻.」 패턴을 지킨다 — 검사기가 문장 수·재사용 실존 여부·스타일 꼬리 일치까지 자동으로 본다.
+
 ## 1. 대본 → 더빙
 
 대본 정본은 `data/longform/<key>.json` 의 `script_v2.lines` (원고 세션이 `qa_gate.py pre <key>` PASS 상태로 넘긴다).

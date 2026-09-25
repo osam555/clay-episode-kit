@@ -5,11 +5,14 @@ flow_assemble.py --deploy 가 이걸 부른다. 인트로·엔딩 에셋만 바�
 """
 import sys, os, json, subprocess
 ROOT = os.environ.get('ALLIRANG_ROOT', os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import kitconfig
+_CFG = kitconfig.load(ROOT)
 def ff(*a): subprocess.run(['ffmpeg','-y','-loglevel','error',*a],check=True)
 def dur(f): return float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',f]))
 
 def concat(body, out):
-    intro=f'{ROOT}/assets/intro_msg.mp4'; ending=f'{ROOT}/assets/ending_narr.mp4'
+    intro=f'{ROOT}/{_CFG["brand"]["intro_mp4"]}'; ending=f'{ROOT}/{_CFG["brand"]["outro_mp4"]}'
     ff('-i',intro,'-i',body,'-i',ending,'-filter_complex',
        "[0:v]scale=1920:1080,fps=30,setsar=1[v0];[0:a]aformat=sample_rates=48000:channel_layouts=mono[a0];"
        "[1:v]scale=1920:1080,fps=30,setsar=1[v1];[1:a]aformat=sample_rates=48000:channel_layouts=mono[a1];"

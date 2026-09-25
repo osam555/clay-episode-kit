@@ -7,6 +7,9 @@ flow_assemble.py <ep> --short 가 만든 <scratch>/<ep>_short.mp4 를 편 JSON �
 import json, os, subprocess, sys
 
 R = __import__('os').environ.get('ALLIRANG_ROOT', __import__('os').path.abspath(__import__('os').path.join(__import__('os').path.dirname(__file__),'..')))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import kitconfig
+_BRAND = kitconfig.load(R)['brand']
 
 
 def main():
@@ -27,8 +30,8 @@ def main():
         'description': '\n'.join([
             f'{d.get("word", "")} — 첫 장면만 45초. 뒷이야기는 전체 영상에서.', '',
             (f'▶ 전체 영상: https://youtu.be/{long_id}' if long_id else ''),
-            f'📖 https://allirang.com/word/{ep}',
-            '알리랑 — 한자 어원으로 배우는 우리말', '#알리랑 #한자 #어원 #문해력 #Shorts'])}
+            f'📖 {_BRAND["site_url"]}/{ep}',
+            _BRAND['description_footer'], ' '.join(_BRAND['hashtags'] + ['#Shorts'])])}
     json.dump(d, open(ej, 'w'), ensure_ascii=False, indent=2)
     print(f'{ep} hook_short ← {mp4} ({sec:.1f}s) · 제목 「{d["hook_short"]["title"]}」')
     if dry: return

@@ -2,14 +2,18 @@
 """알리랑 썸네일 정본 — 유명 유튜브(EBS·헉깨비·건축사전) 대조로 확정한 타이포 + **요소 bbox 자동 기록**.
 bbox 를 meta.json 으로 남겨 `visual_check.py thumb` 가 잘림·크기·겹침을 자동 검사한다.
 (오쌤 2026-09-20 「리뷰 시스템이 제대로 작동하지 않는 문제 해결」)"""
-import json
+import json, os, sys
 from PIL import Image, ImageChops, ImageDraw, ImageFont
 W,H=1280,720
 MARGIN=28
 R = __import__('os').environ.get('ALLIRANG_ROOT', __import__('os').path.abspath(__import__('os').path.join(__import__('os').path.dirname(__file__),'..')))
-BHS=f'{R}/remotion/public/fonts/BlackHanSans-Regular.ttf'
-FB=f'{R}/remotion/public/fonts/NotoSansCJKkr-Black.otf'
-WM=f'{R}/remotion/public/allirang-wordmark.png'
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import kitconfig
+_CFG = kitconfig.load(R)
+_TH = _CFG['thumbnail']
+BHS=f'{R}/{_TH["headline_font"]}'
+FB=f'{R}/{_TH["fallback_font"]}'
+WM=f'{R}/{_CFG["brand"]["wordmark_png"]}'
 YEL=(255,214,0,255); WHT=(255,255,255,255); NAVY=(24,34,62,255); CYAN=(14,116,144,255)
 
 def stroke_text(d, xy, text, f, fill, stroke, stroke_fill):

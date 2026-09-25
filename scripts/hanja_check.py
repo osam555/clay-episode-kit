@@ -9,7 +9,11 @@
 """
 import sys, os, json
 ROOT = __import__('os').environ.get('ALLIRANG_ROOT', __import__('os').path.abspath(__import__('os').path.join(__import__('os').path.dirname(__file__),'..')))
-T=json.load(open(f'{ROOT}/data/hanja_tiers.json'))
+try:
+    T=json.load(open(f'{ROOT}/data/hanja_tiers.json'))
+except FileNotFoundError:
+    # generic(비한자) kit 에는 이 표가 없을 수 있다 — 카드에 한자가 없으면(hz() 빈 리스트) 애초에 안 쓰인다.
+    T={'T1': [], 'T2': [], 'T3': []}
 TIER={**{g:'T1' for g in T['T1']},**{g:'T2' for g in T['T2']},**{g:'T3' for g in T['T3']},**{g:'T3' for g in T.get('MOE2016_examples',[])},**{g:'T3' for g in T.get('REF_hanjavoca',[])}}   # 교육부 2016 예시 글자는 300자권으로
 W={'T1':1.0,'T2':0.7,'T3':0.4,'밖':0.0}
 

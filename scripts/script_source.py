@@ -49,7 +49,17 @@ def load(vid):
             if not lines:
                 lines, src = sv.get('lines'), 'script_v2'
             cards = cards or sv.get('cards')
+    cards = _normalize_cards(cards)
     return lines or [], cards or {}, src
+
+
+def _normalize_cards(cards):
+    """generic 편은 script_v2.cards 를 [{"line":9,"title":"..","subtitle":".."}, ...] 배열로 쓴다(한자 아닌 키워드 카드).
+    나머지 파이프라인(card_check·hanja_check·flow_assemble)은 {"CARD": {"<g>": [title, subtitle]}} 딕셔너리 모양을 기대하므로 여기서 바꿔 준다.
+    한자 편의 cards.json({"CARD": {...}, ...})은 그대로 통과한다."""
+    if isinstance(cards, list):
+        return {'CARD': {str(c['line']): [c.get('title', ''), c.get('subtitle', '')] for c in cards}}
+    return cards
 
 
 def spoken(line):

@@ -7,7 +7,11 @@ sys.path.insert(0, os.path.join(R,'scripts'))
 import youtube_upload as Y
 from browser import repl as _browser_repl
 S = os.environ.get('FLOW_WORK', os.path.join(R,'scratch','flow_tools'))
+import kitconfig
+_CH_CFG = kitconfig.load(R)['channels']
 CH = json.loads(os.environ.get('YT_CHANNELS', '{}'))   # {'<채널키>': ['<aside Studio 탭 id>', '<채널 ID UC…>', '<재생목록 이름>']}
+if not CH:  # env 가 없으면 kit.config.json 의 channels 로 (studio_tab_hint·channel_id·playlist)
+    CH = {k: [v.get('studio_tab_hint'), v.get('channel_id'), v.get('playlist')] for k, v in _CH_CFG.items()}
 ep, kind, chn = sys.argv[1:4]
 tab, cid, pl = CH[chn]
 meta = [m for m in json.load(open(f'{S}/yt_meta.json')) if m['ep'] == ep and m['kind'] == kind][0]

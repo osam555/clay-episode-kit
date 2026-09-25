@@ -2,16 +2,17 @@
 """부모 탑10 컷 설계 생성기 — python3 top10_plan.py <ep>  → data/longform/prompts/<ep>.json"""
 import json, sys, os
 R = os.environ.get('ALLIRANG_ROOT', os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
-TAIL = ("Bright colorful low-poly 3D clay-like models with soft rounded edges, warm pastel palette of cream, sky blue, mint green and soft coral, "
-        "on a clean pale cream studio background with a faint soft ground shadow. Soft warm studio lighting from upper left, gentle ambient occlusion, "
-        "no harsh shadows. Clean playful explainer animation look for children, not photorealistic, not cinematic, not dark. "
-        "No numbers, no lettering, no text, no captions, no watermark, no UI, no logo.")
-CH = "a round clay child with a simple round face, two small dark eyes and rosy cheeks, wearing a blue shirt"
-MOM = ("a taller clay parent figure wearing a mint green cardigan, a friendly clay mother with a simple round human face, "
-       "short black bob hair, two small dark eyes and rosy cheeks")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import kitconfig
+_CFG = kitconfig.load(R)
+_STYLE = _CFG['style']
+_C = _CFG['characters']
+TAIL = _STYLE['tail']
+CH = _C['CH']
+MOM = _C['MOM']
 CHB = CH + ", a small boy with light peach skin and short brown hair,"
-FR = "a smiling clay classmate in a coral shirt"
-GRAND = "a kind clay grandfather figure with short white hair and a soft grey vest"
+FR = _C['FR']
+GRAND = _C['GRAND']
 
 def scene(body, cam="The camera holds a gentle slow push in."):
     return f"Clean 3D CG scene of {body} {cam} {TAIL}"
@@ -25,15 +26,15 @@ def hero(body):
     return (f"{body} Tight composition, warm bright light, thick rounded low-poly clay style, the subject fills most of the frame, "
             f"a soft empty area at lower left for text, 16:9. The camera holds perfectly still. {TAIL}")
 
-FR2 = "a smiling clay classmate in a coral shirt with short black hair"
-CHB2 = CH + ", a small boy with light peach skin and a full head of short brown hair,"
-C2 = CHB2; F2 = FR2
-MP = MOM + " with light peach skin"
-LT = "placed at the left third of the frame, plain soft cream wall filling the whole right half."
-DAD = "a taller clay parent figure wearing a sky blue cardigan, a friendly clay father with a simple round human face, short black hair, two small round eyes and rosy cheeks"
-DP = DAD + " with light peach skin"
-GRM = "a kind clay grandmother with short white hair in a soft pink cardigan"
-TEACH = "a friendly clay teacher figure in a light yellow blouse with black hair in a low bun and round glasses"
+FR2 = _C['FR2']
+CHB2 = _C['CHB2']
+C2 = _C['C2']; F2 = _C['F2']
+MP = _C['MP']
+LT = _C['LT']
+DAD = _C['DAD']
+DP = _C['DP']
+GRM = _C['GRM']
+TEACH = _C['TEACH']
 
 def TH(a_flow, a_head, panel, b_flow, b_head, doc, c_flow, c_bg, c_head):
     return {'a': {'flow': hero(a_flow), 'head': a_head, 'panel': panel},

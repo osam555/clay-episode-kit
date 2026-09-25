@@ -21,26 +21,18 @@
 import argparse, json, os, sys
 
 ROOT = os.environ.get('ALLIRANG_ROOT', os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import kitconfig
+_CFG = kitconfig.load(ROOT)
+_BRAND = _CFG['brand']
 SECRET = f'{ROOT}/.youtube_client_secret.json'
-# ⚠ allirang 은 소유자 계정이 관리하는 **브랜드 계정 @allirang** 이다(개인 채널이 아니다) — 예시일 뿐, 자기 채널 라벨로 바꿔 쓴다.
+# ⚠ 브랜드 채널은 소유자 계정이 관리하는 **브랜드 계정**이다(개인 채널이 아니다) — kit.config.json 의 channels 로 바꿔 쓴다.
 # OAuth 동의 화면에서 채널을 고르는 단계가 나오는데, 거기서 브랜드 채널을 고르지 않으면
-# 개인 채널(@johnwu571, 표시이름 「seungjong oh (대충영어)」)로 토큰이 난다 — 2026-09-23 에 6편이 그리 갔다.
-# expect_url 로 매 업로드 전에 막는다.
-CHANNELS = {
-    'allirang': {'token': f'{ROOT}/.youtube_token.json',
-                 'label': '알리랑 (브랜드계정)',
-                 'expect_url': '@allirang'},
-    'daechung': {'token': f'{ROOT}/.youtube_token_daechung.json',
-                 'label': '대충영어 (seungjong555)',
-                 'expect_url': None},
-    # 배포용이 아니다 — 2026-09-23 에 여기로 잘못 올라간 6편을 비공개로 내리려고 둔 슬롯.
-    # 같은 구글 계정이지만 브랜드(@allirang)가 아니라 개인 채널이다.
-    'johnwu571': {'token': f'{ROOT}/.youtube_token_johnwu571.json',
-                  'label': '개인 채널 (배포용 아님)',
-                  'expect_url': '@johnwu571'},
-}
-DEFAULT_CHANNEL = 'allirang'
-PUBLISH_CHANNELS = ['allirang', 'daechung']   # --both 대상. johnwu571 은 정리용이라 뺀다.
+# 딴 개인 채널로 토큰이 난다(2026-09-23 알리랑에서 겪음). expect_url 로 매 업로드 전에 막는다.
+CHANNELS = {k: {'token': f'{ROOT}/{v["token"]}', 'label': v.get('label', k), 'expect_url': v.get('expect_url')}
+            for k, v in _CFG['channels'].items()}
+DEFAULT_CHANNEL = _CFG['default_channel']
+PUBLISH_CHANNELS = _CFG['publish_channels']   # --both 대상.
 SCOPES = ['https://www.googleapis.com/auth/youtube.upload',
            'https://www.googleapis.com/auth/youtube']
 
@@ -89,10 +81,10 @@ def load_episode_meta(eid):
         '',
         ep.get('dictNote', '').split('.')[0] + '.',
         '',
-        '📖 알리랑 — 한자 어원으로 배우는 우리말',
-        f'🌐 https://allirang.com/word/{eid}',
+        _BRAND['description_footer'],
+        f'🌐 {_BRAND["site_url"]}/{eid}',
     ]
-    tags = ['한자', '어원', '우리말', '초등국어', '알리랑']
+    tags = ['한자', '어원', '우리말', '초등국어', _BRAND['name']]
     h = ep.get('master', {}).get('char', {})
     if h.get('h'):
         tags.append(h['h'])
@@ -107,7 +99,7 @@ def load_episode_meta(eid):
     if ym.get('titles'):
         title = ym['titles'][0]
     if ym.get('description'):
-        desc_lines = [ym['description'], '', '📖 알리랑 — 한자 어원으로 배우는 우리말', f'🌐 https://allirang.com/word/{eid}']
+        desc_lines = [ym['description'], '', _BRAND['description_footer'], f'🌐 {_BRAND["site_url"]}/{eid}']
     tags += ym.get('tags', [])
     tags = list(dict.fromkeys(tags))
 
@@ -150,9 +142,9 @@ def load_part_meta(eid, part):
     title = pt.get('title') or (ep['title_ko'].split(' — ')[0] + ' #Shorts')
     desc = pt.get('description') or '\n'.join([
         ep.get('title_en', ''), '',
-        f'📖 전체 영상: https://allirang.com/word/{eid}',
-        '알리랑 — 한자 어원으로 배우는 우리말'])
-    tags = list(dict.fromkeys(['알리랑', '한자', '어원', '우리말', 'Shorts'] + (ep.get('yt_meta') or {}).get('tags', [])))
+        f'📖 전체 영상: {_BRAND["site_url"]}/{eid}',
+        _BRAND['description_footer']])
+    tags = list(dict.fromkeys([_BRAND['name'], '한자', '어원', '우리말', 'Shorts'] + (ep.get('yt_meta') or {}).get('tags', [])))
     return {'eid': eid, 'part': part, 'title': title, 'description': desc, 'tags': tags,
             'video_path': f"{ROOT}/{pt['render']['deploy']}", 'thumb_path': None, 'category': '27'}
 
@@ -242,9 +234,9 @@ def upload(meta, dry=False, channel=DEFAULT_CHANNEL):
     return vid
 
 
-# 편 JSON 의 어느 칸에 videoId 를 적는가 — 채널별로 다르다
-YT_FIELD = {'allirang': 'yt', 'daechung': 'yt_daechung'}
-PLAYLIST = {'daechung': 'PLVkZur3-_ysc'}   # 아리랑 알리랑 allirang
+# 편 JSON 의 어느 칸에 videoId 를 적는가 — 채널별로 다르다. 기본 채널은 'yt', 그 외는 'yt_<채널키>'.
+YT_FIELD = {k: ('yt' if k == DEFAULT_CHANNEL else f'yt_{k}') for k in CHANNELS}
+PLAYLIST = {k: v['playlist'] for k, v in _CFG['channels'].items() if v.get('playlist')}
 
 
 def record_id(eid, channel, vid, part=None):

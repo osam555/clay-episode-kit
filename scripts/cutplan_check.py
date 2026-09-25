@@ -21,6 +21,7 @@ import json, os, re, sys, glob
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import script_source
+import kitconfig
 
 import os
 ROOT = os.environ.get('ALLIRANG_ROOT', os.getcwd())
@@ -41,11 +42,16 @@ def load(p):
 
 
 def style_tail():
-    """day 편 프롬프트의 꼬리를 정본으로 삼는다 — 모든 편이 같은 그림체여야 한다."""
-    d = load(f'{PROMPTS}/day.json')
-    one = next(iter(d['new_prompts'].values()))
-    i = one.find('Bright colorful low-poly')
-    return one[i:] if i >= 0 else None
+    """스타일 꼬리 정본 — kit.config.json 의 style.tail (모든 편이 같은 그림체여야 한다).
+    day.json 같은 특정 편 파일이 있으면(옛 알리랑 레이아웃) 그쪽을 우선한다 — 없으면 config 값 그대로."""
+    dayp = f'{PROMPTS}/day.json'
+    if os.path.exists(dayp):
+        d = load(dayp)
+        one = next(iter(d['new_prompts'].values()))
+        i = one.find('Bright colorful low-poly')
+        if i >= 0:
+            return one[i:]
+    return kitconfig.load(ROOT)['style']['tail']
 
 
 def characters():

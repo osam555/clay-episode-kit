@@ -1,0 +1,63 @@
+{
+  "id": "generic_rainbow",
+  "word": "무지개",
+  "track": "generic",
+  "status": "draft",
+  "title_ko": "무지개는 왜 생길까 (만든 대사, 실제 대본 아님)",
+  "title_en": "Why Does a Rainbow Appear? (made-up dialogue, not a real script)",
+  "target_seconds": 150,
+  "dictNote": "이 파일은 topic.kind=generic 스키마 예시용이다 — 한자를 쓰지 않는 일반 주제(과학) 편.",
+  "sources": [],
+  "needs_verify": [],
+  "tts": {
+    "provider": "typecast",
+    "model": "ssfm-v30",
+    "voices": {
+      "narrator": "tc_REPLACE_NARRATOR_VOICE_ID",
+      "child": "tc_REPLACE_CHILD_VOICE_ID",
+      "adult": "tc_REPLACE_ADULT_VOICE_ID",
+      "friend": "tc_REPLACE_FRIEND_VOICE_ID"
+    }
+  },
+  "script_v2": {
+    "note": "generic 카드 예시 — 24줄, [[child]]/[[adult]]/[[friend]] 화자 태그, 키워드 카드 4장.",
+    "lines": [
+      { "ch": 0, "i": 1, "text": "[[child]] 엄마, 비 그친 다음에 왜 하늘에 무지개가 떠요?", "g": 1 },
+      { "ch": 0, "i": 2, "text": "[[adult]] 오, 좋은 질문이네. 하늘에 아직 남은 물방울 때문이야.", "g": 2 },
+      { "ch": 0, "i": 3, "text": "[[friend]] 나도 어제 봤어! 일곱 색깔이 다 있었어.", "g": 3 },
+      { "ch": 0, "i": 4, "text": "[[adult]] 같이 볼까요?", "g": 4 },
+      { "ch": 1, "i": 5, "text": "햇빛은 사실 여러 색이 섞인 빛이에요.", "g": 5 },
+      { "ch": 1, "i": 6, "text": "그 빛이 작은 물방울 속을 지나가면 색이 갈라져요.", "g": 6 },
+      { "ch": 2, "i": 7, "text": "빛. 해에서 오는 밝은 것에 색이 숨어 있어요. 물방울을 만나면 드러나요.", "g": 7 },
+      { "ch": 2, "i": 8, "text": "[[child]] 우와, 빛 속에 색이 숨어 있었어요?", "g": 8 },
+      { "ch": 2, "i": 9, "text": "굴절. 빛이 물방울 속에서 휘어지는 것에 색마다 다르게 꺾여요.", "g": 9 },
+      { "ch": 2, "i": 10, "text": "[[friend]] 그래서 색깔마다 자리가 다른 거구나!", "g": 10 },
+      { "ch": 2, "i": 11, "text": "반사. 빛이 물방울 안쪽에서 튕겨 나오는 것에 우리 눈까지 와요.", "g": 11 },
+      { "ch": 2, "i": 12, "text": "[[adult]] 그래서 우리 쪽으로 색이 와닿는 거야.", "g": 12 },
+      { "ch": 2, "i": 13, "text": "각도. 해와 눈 사이 기울어진 정도에 마흔두 도쯤에서 잘 보여요.", "g": 13 },
+      { "ch": 2, "i": 14, "text": "[[child]] 마흔두 도? 신기하다.", "g": 14 },
+      { "ch": 3, "i": 15, "text": "[[friend]] 그런데 왜 항상 무지개는 둥글게 보여요?", "g": 15 },
+      { "ch": 3, "i": 16, "text": "[[adult]] 물방울이 빛을 둥글게 튕겨내기 때문이야 — 그래서 활 모양이 돼.", "g": 16 },
+      { "ch": 3, "i": 17, "text": "[[child]] 그래서 무지개 끝에 갈 수 없는 거구나.", "g": 17 },
+      { "ch": 3, "i": 18, "text": "[[adult]] 맞아, 내가 움직이면 무지개도 같이 움직이거든.", "g": 18 },
+      { "ch": 4, "i": 19, "text": "정리해 볼까요?", "g": 19 },
+      { "ch": 4, "i": 20, "text": "빛은 여러 색이 섞여 있고, 물방울 속에서 굴절돼요.", "g": 20 },
+      { "ch": 4, "i": 21, "text": "그 빛이 반사돼 우리 눈에 오면, 알맞은 각도에서 무지개가 보여요.", "g": 21 },
+      { "ch": 4, "i": 22, "text": "빛, 굴절, 반사, 각도. 다 무지개를 만드는 친구들이에요.", "g": 22 },
+      { "ch": 5, "i": 23, "text": "[[friend]] 다음에 비 그치면 꼭 하늘을 봐야겠다!", "g": 23 },
+      { "ch": 5, "i": 24, "text": "[[child]] 나도 이제 무지개 친구들 이름 다 알아요!", "g": 24 }
+    ],
+    "cards": [
+      { "line": 7, "title": "빛", "subtitle": "색이 숨어 있어요" },
+      { "line": 9, "title": "굴절", "subtitle": "빛이 휘어져요" },
+      { "line": 11, "title": "반사", "subtitle": "눈까지 튕겨와요" },
+      { "line": 13, "title": "각도", "subtitle": "마흔두 도쯤" }
+    ]
+  },
+  "images": [],
+  "yt_meta": {
+    "titles": ["무지개는 왜 생길까? — 빛이 숨긴 색깔 이야기"],
+    "description": "비 그친 하늘, 무지개는 왜 둥글게 뜰까요? 빛과 물방울의 비밀을 알아봐요.",
+    "tags": ["과학", "무지개", "빛", "초등과학"]
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "brand": {
+    "name": "알리랑",
+    "wordmark_png": "remotion/public/allirang-wordmark.png",
+    "logo_png": "assets/brand/allirang-logo.png",
+    "intro_mp4": "assets/intro_msg.mp4",
+    "outro_mp4": "assets/ending_narr.mp4",
+    "site_url": "https://allirang.com/word",
+    "hashtags": [
+      "#알리랑",
+      "#한자",
+      "#어원",
+      "#문해력"
+    ],
+    "description_footer": "📖 알리랑 — 한자 어원으로 배우는 우리말"
+  },
+  "channels": {
+    "allirang": {
+      "studio_tab_hint": null,
+      "channel_id": null,
+      "playlist": null,
+      "token": ".youtube_token.json",
+      "label": "알리랑 (브랜드계정)",
+      "expect_url": "@allirang"
+    },
+    "daechung": {
+      "studio_tab_hint": null,
+      "channel_id": null,
+      "playlist": "PLVkZur3-_ysc",
+      "token": ".youtube_token_daechung.json",
+      "label": "대충영어 (seungjong555)",
+      "expect_url": null
+    },
+    "johnwu571": {
+      "studio_tab_hint": null,
+      "channel_id": null,
+      "playlist": null,
+      "token": ".youtube_token_johnwu571.json",
+      "label": "개인 채널 (배포용 아님)",
+      "expect_url": "@johnwu571"
+    }
+  },
+  "default_channel": "allirang",
+  "publish_channels": [
+    "allirang",
+    "daechung"
+  ],
+  "style": {
+    "tail": "Bright colorful low-poly 3D clay-like models with soft rounded edges, warm pastel palette of cream, sky blue, mint green and soft coral, on a clean pale cream studio background with a faint soft ground shadow. Soft warm studio lighting from upper left, gentle ambient occlusion, no harsh shadows. Clean playful explainer animation look for children, not photorealistic, not cinematic, not dark. No numbers, no lettering, no text, no captions, no watermark, no UI, no logo.",
+    "palette": [
+      "cream",
+      "sky blue",
+      "mint green",
+      "soft coral"
+    ],
+    "negative": [
+      "not photorealistic",
+      "not cinematic",
+      "not dark",
+      "no text",
+      "no watermark"
+    ]
+  },
+  "characters": {
+    "CH": "a round clay child with a simple round face, two small dark eyes and rosy cheeks, wearing a blue shirt",
+    "MOM": "a taller clay parent figure wearing a mint green cardigan, a friendly clay mother with a simple round human face, short black bob hair, two small dark eyes and rosy cheeks",
+    "FR": "a smiling clay classmate in a coral shirt",
+    "GRAND": "a kind clay grandfather figure with short white hair and a soft grey vest",
+    "FR2": "a smiling clay classmate in a coral shirt with short black hair",
+    "CHB2": "a round clay child with a simple round face, two small dark eyes and rosy cheeks, wearing a blue shirt, a small boy with light peach skin and a full head of short brown hair,",
+    "C2": "a round clay child with a simple round face, two small dark eyes and rosy cheeks, wearing a blue shirt, a small boy with light peach skin and a full head of short brown hair,",
+    "F2": "a smiling clay classmate in a coral shirt with short black hair",
+    "MP": "a taller clay parent figure wearing a mint green cardigan, a friendly clay mother with a simple round human face, short black bob hair, two small dark eyes and rosy cheeks with light peach skin",
+    "LT": "placed at the left third of the frame, plain soft cream wall filling the whole right half.",
+    "DAD": "a taller clay parent figure wearing a sky blue cardigan, a friendly clay father with a simple round human face, short black hair, two small round eyes and rosy cheeks",
+    "DP": "a taller clay parent figure wearing a sky blue cardigan, a friendly clay father with a simple round human face, short black hair, two small round eyes and rosy cheeks with light peach skin",
+    "GRM": "a kind clay grandmother with short white hair in a soft pink cardigan",
+    "TEACH": "a friendly clay teacher figure in a light yellow blouse with black hair in a low bun and round glasses"
+  },
+  "language": {
+    "narration": "ko",
+    "on_screen": "ko"
+  },
+  "tts": {
+    "provider": "typecast",
+    "voices": {
+      "narrator": null,
+      "child": null,
+      "adult": null,
+      "friend": null
+    }
+  },
+  "thumbnail": {
+    "headline_font": "remotion/public/fonts/BlackHanSans-Regular.ttf",
+    "fallback_font": "remotion/public/fonts/NotoSansCJKkr-Black.otf",
+    "box_color": "#FFD600",
+    "wordmark_pill": true
+  },
+  "topic": {
+    "kind": "hanja",
+    "card_style": "hanja"
+  }
+}

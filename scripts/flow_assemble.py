@@ -9,6 +9,9 @@
 import subprocess, os, sys, re as _re, json as _json
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import kitconfig
+_CFG = kitconfig.load()
 if len(sys.argv)<2: sys.exit("사용법: flow_assemble.py <id> [--deploy]")
 VID=sys.argv[1]; DEPLOY='--deploy' in sys.argv
 # --clean: 자막·카드 없는 본편(재사용 라이브러리용) → <scratch>/clean/ 에 조각, <scratch>/<id>_clean.mp4. 배포본은 건드리지 않는다.
@@ -40,7 +43,7 @@ if SHORT:
     _th=_p0.get('thumb',{}); _hd=(_p0.get('short_title') or (_th.get('c') or _th.get('a') or {}).get('head') or [])
     sys.path.insert(0,os.path.dirname(os.path.abspath(__file__))); from thumb_lib import stroke_text, BHS
     TP=f'{PD}/title.png'; _ti=Image.new('RGBA',(W,H),(0,0,0,0)); _td=ImageDraw.Draw(_ti)
-    _lg=f'{ROOT}/assets/brand/allirang-logo.png'
+    _lg=f'{ROOT}/{_CFG["brand"]["logo_png"]}'
     if os.path.exists(_lg):   # 좌상단 로고 (오쌤 2026-09-25) — 쇼츠 UI 아이콘은 우상단이라 왼쪽 위는 비어 있다
         _li=Image.open(_lg).convert('RGBA'); _li.thumbnail((150,150)); _ti.alpha_composite(_li,(44,44))
     _y=190 if len(_hd)>1 else 250
