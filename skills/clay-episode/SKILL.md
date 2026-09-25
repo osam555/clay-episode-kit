@@ -116,7 +116,7 @@ python3 scripts/make_thumb.py rainbow                   # 썸네일 3장, 셋 �
 python3 scripts/flow_assemble.py rainbow --deploy       # 롱폼 (5~10분)
 python3 scripts/flow_assemble.py rainbow --short        # 쇼츠
 python3 scripts/qa_gate.py post rainbow                 # 8.0 이상
-python3 scripts/sheet.py rainbow                        # 12장면 시트 한 장 — 눈으로 확인
+python3 scripts/sheet.py rainbow                        # 12장면 시트 한 장 → scratch/flow_tools/rainbow_sheet.jpg 를 열어 눈으로 확인
 
 # B-7 올리기
 python3 scripts/prep_more.py rainbow                    # R2 에 올리고 제목·설명 메타 생성
