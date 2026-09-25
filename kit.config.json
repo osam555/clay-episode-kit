@@ -99,5 +99,10 @@
   "topic": {
     "kind": "hanja",
     "card_style": "hanja"
+  },
+  "storage": {
+    "r2_bucket": "speed-listening-popsong",
+    "r2_prefix": "allirang",
+    "media_base_url": "https://media.brainhz.life/allirang"
   }
 }
