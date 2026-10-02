@@ -10,7 +10,7 @@
   「python3 scripts/kakao_next.py 를 실행해 나온 문구를 카카오톡 나에게 보내기 도구로 그대로 보내고,
    성공했을 때만 python3 scripts/kakao_next.py --commit 을 실행해」
 편 JSON(data/longform/<key>.json)에서 status=published 이고 hook_short.yt(쇼츠 유튜브 ID)가 있는 편을 순서대로 보낸다.
-기록: scratch/kakao_sent.json. 문구 머리말은 kit.config.json 의 brand.name_ko 를 쓴다.
+기록: scratch/kakao_sent.json. 문구 머리말은 kit.config.json 의 brand.name 를 쓴다.
 """
 import argparse, glob, json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -22,7 +22,7 @@ STATE = os.path.join(ROOT, 'scratch', 'kakao_sent.json')
 def brand():
     try:
         from kitconfig import load
-        return (load().get('brand') or {}).get('name_ko') or '쇼츠'
+        return (load().get('brand') or {}).get('name') or '쇼츠'
     except Exception:
         return '쇼츠'
 
